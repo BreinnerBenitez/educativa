@@ -2,6 +2,7 @@ package plataforma.educativa.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import plataforma.educativa.dto.CourseDTO;
 import plataforma.educativa.service.ICourseService;
@@ -9,13 +10,15 @@ import plataforma.educativa.service.ICourseService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("/api/courses")
 @RequiredArgsConstructor
+//@PreAuthorize("denyALL()")
 public class CourseController {
 
     private final ICourseService courseService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CourseDTO> save(
             @RequestBody CourseDTO CourseDTO) {
 
