@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService implements ICourseService {
 
-   private final ICourseRepository courseRepository;
+    private final ICourseRepository courseRepository;
 
     @Override
     public CourseDTO save(CourseDTO CourseDTO) {
@@ -33,21 +33,64 @@ public class CourseService implements ICourseService {
 
     @Override
     public List<CourseDTO> findAll() {
-        return List.of();
+
+        return courseRepository.findAll()
+                .stream()
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getName(),
+                        course.getDescription()
+                ))
+                .toList();
+
+
     }
 
     @Override
     public CourseDTO findById(Long id) {
-        return null;
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Curso no encontrado")
+                );
+
+        return new CourseDTO(
+                course.getId(),
+                course.getName(),
+                course.getDescription()
+        );
     }
 
     @Override
     public CourseDTO update(Long id, CourseDTO CourseDTO) {
-        return null;
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Curso no encontrado")
+                );
+
+        course.setName(CourseDTO.name());
+        course.setDescription(CourseDTO.description());
+
+        Course updatedCourse = courseRepository.save(course);
+
+        return new CourseDTO(
+                updatedCourse.getId(),
+                updatedCourse.getName(),
+                updatedCourse.getDescription()
+        );
+
     }
 
     @Override
     public void delete(Long id) {
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Curso no encontrado")
+                );
+
+        courseRepository.delete(course);
 
     }
 }
