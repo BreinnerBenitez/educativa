@@ -3,9 +3,10 @@ package plataforma.educativa.dto;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Set;
-@JsonPropertyOrder({"id", "name", "description"})
+@JsonPropertyOrder({"id", "name", "description","professorId"})
 public record CourseDTO(Long id,
                         String name,
-                        String description
+                        String description,
+                        Long professorId
 ) {
 }

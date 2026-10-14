@@ -3,8 +3,11 @@ package plataforma.educativa.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import plataforma.educativa.dto.CourseDTO;
+import plataforma.educativa.dto.ProfessorDTO;
 import plataforma.educativa.model.Course;
+import plataforma.educativa.model.Professor;
 import plataforma.educativa.repository.ICourseRepository;
+import plataforma.educativa.repository.IProfessorRepository;
 
 import java.util.List;
 
@@ -13,21 +16,26 @@ import java.util.List;
 public class CourseService implements ICourseService {
 
     private final ICourseRepository courseRepository;
+    private final IProfessorRepository professorRepository;
 
     @Override
-    public CourseDTO save(CourseDTO CourseDTO) {
+    public CourseDTO save(CourseDTO courseDTO) {
+
+        Professor professor = professorRepository
+                .findById(courseDTO.professorId())
+                .orElseThrow(() ->
+                        new RuntimeException("Profesor no encontrado")
+                );
+
         Course course = Course.builder()
-                .name(CourseDTO.name())
-                .description(CourseDTO.description())
+                .name(courseDTO.name())
+                .description(courseDTO.description())
+                .professor(professor)
                 .build();
 
         Course savedCourse = courseRepository.save(course);
 
-        return new CourseDTO(
-                savedCourse.getId(),
-                savedCourse.getName(),
-                savedCourse.getDescription()
-        );
+        return  toDTO(course);
 
     }
 
@@ -36,11 +44,7 @@ public class CourseService implements ICourseService {
 
         return courseRepository.findAll()
                 .stream()
-                .map(course -> new CourseDTO(
-                        course.getId(),
-                        course.getName(),
-                        course.getDescription()
-                ))
+                .map(this::toDTO)
                 .toList();
 
 
@@ -54,11 +58,7 @@ public class CourseService implements ICourseService {
                         new RuntimeException("Curso no encontrado")
                 );
 
-        return new CourseDTO(
-                course.getId(),
-                course.getName(),
-                course.getDescription()
-        );
+        return toDTO(course);
     }
 
     @Override
@@ -74,11 +74,7 @@ public class CourseService implements ICourseService {
 
         Course updatedCourse = courseRepository.save(course);
 
-        return new CourseDTO(
-                updatedCourse.getId(),
-                updatedCourse.getName(),
-                updatedCourse.getDescription()
-        );
+        return toDTO(course);
 
     }
 
@@ -91,6 +87,19 @@ public class CourseService implements ICourseService {
                 );
 
         courseRepository.delete(course);
+
+
+    }
+
+
+    private CourseDTO toDTO(Course course) {
+
+        return new CourseDTO(
+                course.getId(),
+                course.getDescription(),
+                course.getName(),
+                course.getProfessor().getId()
+        );
 
     }
 }

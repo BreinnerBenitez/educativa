@@ -17,4 +17,6 @@ public interface IProfessorService {
     ProfessorDTO update(Long id, ProfessorDTO ProfessorDTO);
 
     void delete(Long id);
+
+
 }
