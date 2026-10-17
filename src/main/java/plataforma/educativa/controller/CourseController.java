@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import plataforma.educativa.dto.CourseDTO;
+import plataforma.educativa.service.CourseService;
 import plataforma.educativa.service.ICourseService;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 //@PreAuthorize("denyALL()")
 public class CourseController {
 
-    private final ICourseService courseService;
+    private final CourseService courseService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")

@@ -35,7 +35,7 @@ public class CourseService implements ICourseService {
 
         Course savedCourse = courseRepository.save(course);
 
-        return  toDTO(course);
+        return  toDTO(savedCourse);
 
     }
 
@@ -74,7 +74,7 @@ public class CourseService implements ICourseService {
 
         Course updatedCourse = courseRepository.save(course);
 
-        return toDTO(course);
+        return toDTO(updatedCourse);
 
     }
 

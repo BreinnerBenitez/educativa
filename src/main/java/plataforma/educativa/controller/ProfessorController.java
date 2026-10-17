@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import plataforma.educativa.dto.ProfessorDTO;
 import plataforma.educativa.service.IProfessorService;
+import plataforma.educativa.service.ProfessorService;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfessorController {
 
-    private final IProfessorService professorService;
+    private final ProfessorService professorService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
